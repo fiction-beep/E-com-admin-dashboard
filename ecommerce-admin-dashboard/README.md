@@ -1,150 +1,125 @@
 # E-commerce Admin Dashboard
 
-A modern, responsive admin dashboard for e-commerce businesses built with Vue 3, TypeScript, and Tailwind CSS.
+A modern, responsive admin dashboard built with Vue 3, TypeScript, and Tailwind CSS. This dashboard provides comprehensive tools for managing an e-commerce platform, including product management, order tracking, and analytics.
 
 ## Features
 
-- **Revenue Analysis**
-  - Real-time metrics for total orders and sales
-  - Interactive charts for revenue trends
-  - Category-wise performance analysis
-  - Historical data visualization
-
-- **Inventory Management**
-  - Complete product listing with advanced filtering
-  - Stock level monitoring
-  - Low stock alerts
-  - Bulk export functionality
-  - Real-time stock updates
-
-- **Product Registration**
-  - User-friendly product addition form
-  - Image upload support
-  - Form validation
-  - Category management
-  - Success notifications
-
-## Tech Stack
-
-- Vue 3 (Composition API)
-- TypeScript
-- Tailwind CSS
-- Chart.js for data visualization
-- AG Grid for data tables
-- Pinia for state management
-- Vue Router for navigation
-- Vite for build tooling
+- 📊 Interactive analytics and charts
+- 📦 Product management with image upload
+- 📝 Order tracking and management
+- 🔍 Advanced data tables with AG Grid
+- 🎨 Modern UI with Tailwind CSS
+- 🔒 Secure authentication system
+- 📱 Fully responsive design
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
+Before you begin, ensure you have the following installed:
+- Node.js (v16 or higher)
+- npm (v7 or higher)
 
 ## Setup Instructions
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/ecommerce-admin-dashboard.git
-   cd ecommerce-admin-dashboard
-   ```
+```bash
+git clone <repository-url>
+cd ecommerce-admin-dashboard
+```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+3. Create a `.env` file in the root directory and add your environment variables:
+```env
+VITE_API_URL=your_api_url
+```
 
-4. Build for production:
-   ```bash
-   npm run build
-   ```
+4. Start the development server:
+```bash
+npm run dev
+```
 
-5. Preview production build:
-   ```bash
-   npm run preview
-   ```
+5. For production build:
+```bash
+npm run build
+```
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+- `npm run server` - Start backend server
 
 ## Project Structure
 
 ```
 ecommerce-admin-dashboard/
 ├── src/
-│   ├── assets/          # Static assets
-│   ├── components/      # Reusable Vue components
-│   ├── pages/          # Page components
-│   ├── router/         # Vue Router configuration
-│   ├── store/          # Pinia store
-│   ├── utils/          # Utility functions
-│   └── App.vue         # Root component
-├── public/             # Public assets
-└── ...config files
+│   ├── assets/        # Static assets
+│   ├── components/    # Vue components
+│   ├── views/         # Page components
+│   ├── router/        # Vue Router configuration
+│   ├── stores/        # Pinia stores
+│   └── types/         # TypeScript type definitions
+├── server/            # Backend server code
+└── public/            # Public static files
 ```
 
-## Features Overview
+## Navigation Guide
 
-### Revenue Analysis Page
-- View total orders and revenue metrics
-- Interactive charts showing trends
-- Filter data by time period
-- Category-wise revenue breakdown
+1. **Dashboard Overview**
+   - Access key metrics and analytics
+   - View recent orders and sales data
+   - Monitor system status
 
-### Inventory Management Page
-- Complete product listing with sorting and filtering
-- Stock level indicators
-- Low stock alerts
-- Export functionality
-- Quick stock updates
+2. **Products**
+   - Manage product catalog
+   - Add/Edit product details
+   - Upload product images
+   - Set pricing and inventory
 
-### Product Registration Page
-- Add new products with detailed information
-- Image upload support
-- Form validation
-- Success notifications
-- Automatic inventory updates
+3. **Orders**
+   - View all orders
+   - Track order status
+   - Process refunds
+   - Generate invoices
 
-## Development
+4. **Analytics**
+   - Sales reports
+   - Customer insights
+   - Revenue tracking
+   - Performance metrics
 
-### Code Style
+## Dependencies
 
-The project uses ESLint and Prettier for code formatting:
+### Core Dependencies
+- Vue 3
+- TypeScript
+- Tailwind CSS
+- Pinia (State Management)
+- Vue Router
+- AG Grid
+- Chart.js
 
-```bash
-# Lint files
-npm run lint
-
-# Format files
-npm run format
-```
-
-### Type Checking
-
-```bash
-# Run type checking
-vue-tsc --noEmit
-```
-
-## Deployment
-
-The application can be deployed to any static hosting service:
-
-1. Build the project:
-   ```bash
-   npm run build
-   ```
-
-2. Deploy the `dist` directory to your hosting service
+### Development Dependencies
+- Vite
+- ESLint
+- Prettier
+- TypeScript
+- Tailwind CSS
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
 
