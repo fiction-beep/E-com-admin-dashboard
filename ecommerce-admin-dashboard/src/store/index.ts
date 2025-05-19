@@ -10,6 +10,9 @@ interface Product {
   stock: number
   image?: string
   status: 'In Stock' | 'Low Stock' | 'Out of Stock'
+  lowStockThreshold?: number
+  forecastedStock?: number
+  forecastedDays?: number
 }
 
 interface SalesData {
@@ -29,6 +32,8 @@ export const useStore = defineStore('main', {
     products: [] as Product[],
     salesData: [] as SalesData[],
     categoryData: [] as CategoryData[],
+    loading: false,
+    error: null as string | null
   }),
 
   getters: {
@@ -39,7 +44,12 @@ export const useStore = defineStore('main', {
       const totalRevenue = state.salesData.reduce((sum, data) => sum + data.revenue, 0)
       return totalOrders ? totalRevenue / totalOrders : 0
     },
-    lowStockProducts: (state) => state.products.filter(product => product.stock < 10),
+    lowStockProducts: (state) => {
+      return state.products.filter(product => product.stock <= (product.lowStockThreshold || 10))
+    },
+    outOfStockProducts: (state) => {
+      return state.products.filter(product => product.stock === 0)
+    }
   },
 
   actions: {
@@ -50,20 +60,76 @@ export const useStore = defineStore('main', {
       this.categoryData = categoryData
     },
 
-    addProduct(productData: Omit<Product, 'id' | 'status'>) {
-      const newProduct = {
-        id: Date.now().toString(),
-        ...productData,
-        status: this.getProductStatus(productData.stock),
+    async fetchProducts() {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await fetch('/api/products')
+        const data = await response.json()
+        this.products = data
+      } catch (err) {
+        this.error = 'Failed to fetch products'
+        console.error('Error fetching products:', err)
+      } finally {
+        this.loading = false
       }
-      this.products.push(newProduct)
     },
 
-    restockProduct(productId: string, amount: number) {
-      const product = this.products.find(p => p.id === productId)
-      if (product) {
-        product.stock += amount
-        product.status = this.getProductStatus(product.stock)
+    async addProduct(productData: Omit<Product, 'id' | 'status'>) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await fetch('/api/products', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(productData),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to add product')
+        }
+
+        const newProduct = await response.json()
+        this.products.push(newProduct)
+        return newProduct
+      } catch (err) {
+        this.error = 'Failed to add product'
+        console.error('Error adding product:', err)
+        throw err
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async updateProductStock(productId: string, newStock: number) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await fetch(`http://localhost:3001/api/products/${productId}/stock`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ stock: newStock }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to update stock')
+        }
+
+        const updatedProduct = await response.json()
+        const index = this.products.findIndex(p => p.id === productId)
+        if (index !== -1) {
+          this.products[index] = updatedProduct
+        }
+      } catch (err) {
+        this.error = 'Failed to update product stock'
+        console.error('Error updating product stock:', err)
+        throw err
+      } finally {
+        this.loading = false
       }
     },
 

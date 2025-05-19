@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import RevenueAnalysis from '../pages/RevenueAnalysis.vue'
-import InventoryManagement from '../pages/InventoryManagement.vue'
+import InventoryPage from '../pages/InventoryPage.vue'
 import ProductRegistration from '../pages/ProductRegistration.vue'
 
 const router = createRouter({
@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: '/inventory',
       name: 'inventory',
-      component: InventoryManagement
+      component: InventoryPage
     },
     {
       path: '/products/new',

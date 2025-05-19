@@ -9,6 +9,19 @@
         </div>
         
         <div>
+          <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+          <select id="category" v-model="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <option value="">Select a category</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Books">Books</option>
+            <option value="Home & Garden">Home & Garden</option>
+            <option value="Sports & Outdoors">Sports & Outdoors</option>
+            <option value="Toys & Games">Toys & Games</option>
+          </select>
+        </div>
+        
+        <div>
           <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
           <div class="mt-1 relative rounded-md shadow-sm">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -43,6 +56,14 @@
     >
       Product added successfully!
     </div>
+
+    <!-- Error Toast -->
+    <div
+      v-if="showErrorToast"
+      class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg"
+    >
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
@@ -55,22 +76,27 @@ const router = useRouter()
 const store = useStore()
 
 const productName = ref('')
+const category = ref('')
 const price = ref(0)
 const stock = ref(0)
 const description = ref('')
 
 const isSubmitting = ref(false)
 const showSuccessToast = ref(false)
+const showErrorToast = ref(false)
+const errorMessage = ref('')
 
 const handleSubmit = async () => {
   if (!validateForm()) return
 
   isSubmitting.value = true
+  showErrorToast.value = false
 
   try {
     // Add product to store
     await store.addProduct({
       name: productName.value,
+      category: category.value,
       price: price.value,
       stock: stock.value,
       description: description.value
@@ -84,6 +110,7 @@ const handleSubmit = async () => {
 
     // Reset form
     productName.value = ''
+    category.value = ''
     price.value = 0
     stock.value = 0
     description.value = ''
@@ -91,7 +118,11 @@ const handleSubmit = async () => {
     // Navigate to inventory page
     router.push('/inventory')
   } catch (error) {
-    console.error('Error adding product:', error)
+    showErrorToast.value = true
+    errorMessage.value = 'Failed to add product. Please try again.'
+    setTimeout(() => {
+      showErrorToast.value = false
+    }, 3000)
   } finally {
     isSubmitting.value = false
   }
@@ -104,22 +135,22 @@ const validateForm = () => {
     console.error('Product name is required')
     isValid = false
   }
-
-  if (!price.value || price.value <= 0) {
-    console.error('Please enter a valid price')
+  
+  if (!category.value) {
+    console.error('Category is required')
     isValid = false
   }
-
-  if (!stock.value || stock.value < 0) {
-    console.error('Please enter a valid stock amount')
+  
+  if (price.value <= 0) {
+    console.error('Price must be greater than 0')
     isValid = false
   }
-
-  if (!description.value.trim()) {
-    console.error('Description is required')
+  
+  if (stock.value < 0) {
+    console.error('Stock cannot be negative')
     isValid = false
   }
-
+  
   return isValid
 }
 </script>
