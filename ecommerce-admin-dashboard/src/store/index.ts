@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { generateSampleData } from '../utils/sampleData'
+import { getApiUrl, configureApi } from '../config/api'
 
 interface Product {
   id: string
@@ -53,7 +54,8 @@ export const useStore = defineStore('main', {
   },
 
   actions: {
-    initializeStore() {
+    async initializeStore() {
+      await configureApi() // Configure API before initializing store
       const { products, salesData, categoryData } = generateSampleData()
       this.products = products
       this.salesData = salesData
@@ -64,7 +66,7 @@ export const useStore = defineStore('main', {
       this.loading = true
       this.error = null
       try {
-        const response = await fetch('/api/products')
+        const response = await fetch(getApiUrl('/api/products'))
         const data = await response.json()
         this.products = data
       } catch (err) {
@@ -75,16 +77,13 @@ export const useStore = defineStore('main', {
       }
     },
 
-    async addProduct(productData: Omit<Product, 'id' | 'status'>) {
+    async addProduct(productData: FormData) {
       this.loading = true
       this.error = null
       try {
-        const response = await fetch('/api/products', {
+        const response = await fetch(getApiUrl('/api/products'), {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(productData),
+          body: productData,
         })
 
         if (!response.ok) {
@@ -107,7 +106,7 @@ export const useStore = defineStore('main', {
       this.loading = true
       this.error = null
       try {
-        const response = await fetch(`http://localhost:3001/api/products/${productId}/stock`, {
+        const response = await fetch(getApiUrl(`/api/products/${productId}/stock`), {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
